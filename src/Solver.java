@@ -1,6 +1,5 @@
-
 public class Solver {
-    private Sudoku sud;
+    private final Sudoku sud;
 
     public Solver() {
         sud = new Sudoku();
@@ -32,14 +31,9 @@ public class Solver {
     }
 
     public boolean isValid(int row, int col, int num) {
-
         if (!isRowValid(row, num)) return false;
-
         if (!isColValid(col, num)) return false;
-
-        if (!isBoxValid(row, col, num)) return false;
-
-        return true;
+        return isBoxValid(row, col, num);
     }
 
     private boolean isRowValid(int row, int num) {

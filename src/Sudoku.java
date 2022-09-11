@@ -2,6 +2,8 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Sudoku {
@@ -19,19 +21,19 @@ public class Sudoku {
         System.out.print("Enter # columns of inner box: ");
         boxCol = s.nextInt();
         s.close();
-        sudoku = new int[size][size];
+        this.sudoku = new int[size][size];
     }
 
     public int getSize() {
-        return sudoku.length;
+        return this.sudoku.length;
     }
 
-    public void setValue(int row, int col, int value){
+    public void setValue(int row, int col, int value) {
         this.sudoku[row][col] = value;
     }
 
-    public int getValue(int row, int col){
-        return sudoku[row][col];
+    public int getValue(int row, int col) {
+        return this.sudoku[row][col];
     }
 
     public int getBoxRow() {
@@ -51,9 +53,9 @@ public class Sudoku {
                 return false;
             }
 
-            for (int i = 0; i < sudoku.length; i++) {
-                for (int j = 0; j < sudoku[i].length; j++) {
-                    sudoku[i][j] = scan.nextInt();
+            for (int i = 0; i < this.sudoku.length; i++) {
+                for (int j = 0; j < this.sudoku[i].length; j++) {
+                    this.sudoku[i][j] = scan.nextInt();
                 }
             }
             scan.close();
@@ -64,11 +66,34 @@ public class Sudoku {
         return true;
     }
 
+    public void saveSudoku(String file) {
+        try {
+            FileWriter f = new FileWriter(file);
+            int r = 0;
+            int c = 0;
+            String content = "";
+            for (int[] i : this.sudoku) {
+                for (int j : i) {
+                    if (j < 10) content = content + j + " ";
+                    else content = content.concat(j + " ");
+                    c++;
+                }
+                r++;
+                content = content + "\n";
+            }
+            f.write(content);
+            f.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void printSudoku() {
         int r = 0;
         int c = 0;
-        String repeatedStar = new String(new char[4 * sudoku.length + 4]).replace('\0', '-');
-        for (int[] i : sudoku) {
+        String repeatedStar = new String(new char[4 * this.sudoku.length + 4]).replace('\0', '-');
+        for (int[] i : this.sudoku) {
             if (r % boxRow == 0)
                 System.out.print(repeatedStar + '\n');
             for (int j : i) {

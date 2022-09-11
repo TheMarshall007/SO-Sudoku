@@ -32,18 +32,35 @@ public class Solver {
     }
 
     public boolean isValid(int row, int col, int num) {
+
+        if (!isRowValid(row, num)) return false;
+
+        if (!isColValid(col, num)) return false;
+
+        if (!isBoxValid(row, col, num)) return false;
+
+        return true;
+    }
+
+    private boolean isRowValid(int row, int num) {
         for (int j = 0; j < sud.getSize(); j++) {
             if (sud.getValue(row, j) == num) {
                 return false;
             }
         }
+        return true;
+    }
 
+    private boolean isColValid(int col, int num) {
         for (int r = 0; r < sud.getSize(); r++) {
             if (sud.getValue(r, col) == num) {
                 return false;
             }
         }
+        return true;
+    }
 
+    private boolean isBoxValid(int row, int col, int num) {
         int topRightRow = (row / sud.getBoxRow()) * sud.getBoxRow();
         int topRightCol = (col / sud.getBoxCol()) * sud.getBoxCol();
         for (int i = 0; i < 3; i++) {
@@ -56,11 +73,15 @@ public class Solver {
         return true;
     }
 
-    public boolean loadSudoku(String file){
+    public boolean loadSudoku(String file) {
         return sud.loadSudoku(file);
     }
 
-    public void printSudoku(){
+    public void saveSudoku(String file) {
+        sud.saveSudoku(file);
+    }
+
+    public void printSudoku() {
         sud.printSudoku();
     }
 }

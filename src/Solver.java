@@ -17,7 +17,7 @@ public class Solver {
 
         for (int num = 1; num < sud.getSize() + 1; num++) {
             if (sud.getValue(row, col) == 0) {
-                if (isLegal(row, col, num)) {
+                if (isValid(row, col, num)) {
                     sud.setValue(row, col, num);
                     if (solve(row, col + 1)) {
                         return true;
@@ -31,7 +31,7 @@ public class Solver {
         return false;
     }
 
-    public boolean isLegal(int row, int col, int num) {
+    public boolean isValid(int row, int col, int num) {
         for (int j = 0; j < sud.getSize(); j++) {
             if (sud.getValue(row, j) == num) {
                 return false;

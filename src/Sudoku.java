@@ -18,32 +18,37 @@ public class Sudoku {
         size = s.nextInt();
         System.out.print("Enter # rows of inner box: ");
         boxRow = s.nextInt();
-        System.out.print("Enter # columns of inner box: ");
-        boxCol = s.nextInt();
+        boxCol = boxRow;
         s.close();
         this.sudoku = new int[size][size];
     }
 
+    //Get the size value from the matrix
     public int getSize() {
         return this.sudoku.length;
     }
 
+    //Set the value of the element that is in row x col in matrix
     public void setValue(int row, int col, int value) {
         this.sudoku[row][col] = value;
     }
 
+    //Get the value of the element that is in row x col in matrix
     public int getValue(int row, int col) {
         return this.sudoku[row][col];
     }
 
+    //Get the total value from the box row
     public int getBoxRow() {
         return boxRow;
     }
 
+    //Get the total value from the box column
     public int getBoxCol() {
         return boxCol;
     }
 
+    //Load the game from a file
     public boolean loadSudoku(String file) {
         try {
             Scanner scan = new Scanner(new File(file));
@@ -65,6 +70,8 @@ public class Sudoku {
         System.out.println("Sudoku is now loaded.");
         return true;
     }
+
+    //Save the solved game to a file
 
     public void saveSudoku(String file) {
         try {
@@ -88,7 +95,7 @@ public class Sudoku {
         }
     }
 
-
+    //Print the matrix
     public void printSudoku() {
         int r = 0;
         int c = 0;

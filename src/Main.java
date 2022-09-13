@@ -14,7 +14,11 @@ public class Main {
             solver.saveSudoku(fileSave);
             System.out.println("\nIt took me " + (System.currentTimeMillis() - start) + "ms to solve this puzzle.");
         } else {
+            solver.saveSudoku(fileSave);
             System.out.println("No Solution Found!");
         }
+
     }
+
+
 }

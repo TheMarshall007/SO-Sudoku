@@ -15,7 +15,8 @@ public class Sudoku {
         int size = s.nextInt();
         System.out.print("Enter # rows of inner box: ");
         boxRow = s.nextInt();
-        boxCol = boxRow;
+        System.out.print("Enter # col of inner box: ");
+        boxCol = s.nextInt();;
         s.close();
         this.sudoku = new int[size][size];
     }

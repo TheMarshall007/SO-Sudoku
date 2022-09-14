@@ -1,8 +1,8 @@
 public class Main {
     public static void main(String[] args) {
         Solver solver = new Solver();
-        String file ="puzzleSolved.txt";
-        String fileSave= "puzzleSolved.txt";
+        String file ="puzzle2.txt";
+        String fileSave= "puzzleSolved2.txt";
         if (!solver.loadSudoku(file)) {
             return;
         }

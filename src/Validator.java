@@ -1,7 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Validator {
@@ -17,11 +15,11 @@ public class Validator {
         s.close();
         this.sudoku = new int[size][size];
 
-        loadSudoku("puzzleSolved.txt");
+        loadSudoku("puzzleSolved2.txt");
         printSudoku();
         startValidation();
         startValidation1();
-//        startValidation2();
+        startValidation2();
     }
 
     private void startValidation() throws InterruptedException {
@@ -115,7 +113,6 @@ public class Validator {
                 auxValidator[1] = isColValid(i);
             }
         });
-
         Thread box = new Thread(() -> {
             auxValidator[2] = is3x3Valid(0, 0);
             auxValidator[3] = is3x3Valid(0, 3);
@@ -148,121 +145,30 @@ public class Validator {
         System.out.println("It took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
     }
 
-
-    private void startValidation2() throws InterruptedException {
-        auxValidator = new boolean[27];
-
-        Thread[] threads = new Thread[27];
-        int threadIndex = 0;
-
-
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[0] = is3x3Valid(0, 0);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[1] = is3x3Valid(0, 3);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[2] = is3x3Valid(0, 6);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[3] = is3x3Valid(3, 0);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[6] = is3x3Valid(3, 3);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[7] = is3x3Valid(3, 6);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[8] = is3x3Valid(6, 0);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[9] = is3x3Valid(6, 3);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[10] = is3x3Valid(6, 6);
-        });
-
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[11] = isRowValid(1);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[12] = isRowValid(2);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[13] = isRowValid(3);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[14] = isRowValid(4);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[15] = isRowValid(5);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[16] = isRowValid(6);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[17] = isRowValid(7);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[18] = isRowValid(8);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[19] = isRowValid(9);
-        });
-
-
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[20] = isColValid(1);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[21] = isColValid(2);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[22] = isColValid(3);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[23] = isColValid(4);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[24] = isColValid(5);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[25] = isColValid(6);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[26] = isColValid(7);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[27] = isColValid(8);
-        });
-        threads[threadIndex++] = new Thread(() -> {
-            auxValidator[28] = isColValid(9);
-        });
-
-
+    private void startValidation2() {
+        auxValidator = new boolean[11];
+        for (int i = 0; i < size; i++) {
+            auxValidator[0] = isRowValid(i);
+            auxValidator[1] = isColValid(i);
+        }
+        auxValidator[2] = is3x3Valid(0, 0);
+        auxValidator[3] = is3x3Valid(0, 3);
+        auxValidator[4] = is3x3Valid(0, 6);
+        auxValidator[5] = is3x3Valid(3, 0);
+        auxValidator[6] = is3x3Valid(3, 3);
+        auxValidator[7] = is3x3Valid(3, 6);
+        auxValidator[8] = is3x3Valid(6, 0);
+        auxValidator[9] = is3x3Valid(6, 3);
+        auxValidator[10] = is3x3Valid(6, 6);
         long start = System.currentTimeMillis();
-
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
-        }
-
-        for (
-                int i = 0;
-                i < threads.length; i++) {
-            threads[i].join();
-        }
-
-        for (
-                boolean valid : auxValidator) {
+        for (boolean valid : auxValidator) {
             if (!valid) {
-                System.out.println("Sudoku solution is invalid!");
+                System.out.println("Sudoku validation is invalid!");
                 return;
             }
         }
-        System.out.println("Sudoku solution is valid!");
-        System.out.println("\nIt took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
+        System.out.println("\nSudoku solution 2 is valid!");
+        System.out.println("It took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
     }
 
     //Load the solved game from a file

@@ -1,6 +1,6 @@
-
 public class Solver {
-    private Sudoku sud;
+
+    private final Sudoku sud;
     boolean rowValid = true;
     boolean colValid = true;
 
@@ -36,14 +36,11 @@ public class Solver {
 
     //Controls validations
     public boolean isValid(int row, int col, int num) {
-
         if (!isRowValid(row, num)) return false;
-
         if (!isColValid(col, num)) return false;
 
-        if (!is3x3Valid(row, col, num)) return false;
+        return is3x3Valid(row, col, num);
 
-        return true;
     }
 
     //Valid if the number has already been placed on the row

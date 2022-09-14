@@ -1,5 +1,3 @@
-
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -7,15 +5,14 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Sudoku {
-    private int[][] sudoku;
-    private int size;
-    private int boxRow;
-    private int boxCol;
+    private final int[][] sudoku;
+    private final int boxRow;
+    private final int boxCol;
 
     public Sudoku() {
         Scanner s = new Scanner(System.in);
         System.out.print("Enter size of sudoku: ");
-        size = s.nextInt();
+        int size = s.nextInt();
         System.out.print("Enter # rows of inner box: ");
         boxRow = s.nextInt();
         boxCol = boxRow;

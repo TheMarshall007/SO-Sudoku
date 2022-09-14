@@ -7,7 +7,8 @@ import java.util.Scanner;
 public class Validator {
     private int[][] sudoku;
     private int size;
-    private boolean[] auxValidator;
+    private int count = 0;
+    boolean[] auxValidator;
 
     public Validator() throws InterruptedException {
         Scanner s = new Scanner(System.in);
@@ -19,6 +20,7 @@ public class Validator {
         loadSudoku("puzzleSolved.txt");
         printSudoku();
         startValidation();
+//        startValidation2();
     }
 
     private void startValidation() throws InterruptedException {
@@ -26,10 +28,14 @@ public class Validator {
         auxValidator = new boolean[11];
 
         Thread row = new Thread(() -> {
-            auxValidator[0] = isRowValid();
+            for (int i = 0; i < size; i++) {
+                auxValidator[0] = isRowValid(i);
+            }
         });
         Thread col = new Thread(() -> {
-            auxValidator[1] = isColValid();
+            for (int i = 0; i < size; i++) {
+                auxValidator[1] = isColValid(i);
+            }
         });
         Thread box1 = new Thread(() -> {
             auxValidator[2] = is3x3Valid(0, 0);
@@ -94,6 +100,122 @@ public class Validator {
         System.out.println("\nIt took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
     }
 
+    private void startValidation2() throws InterruptedException {
+        auxValidator = new boolean[27];
+
+        Thread[] threads = new Thread[27];
+        int threadIndex = 0;
+
+
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[0] = is3x3Valid(0, 0);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[1] = is3x3Valid(0, 3);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[2] = is3x3Valid(0, 6);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[3] = is3x3Valid(3, 0);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[6] = is3x3Valid(3, 3);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[7] = is3x3Valid(3, 6);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[8] = is3x3Valid(6, 0);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[9] = is3x3Valid(6, 3);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[10] = is3x3Valid(6, 6);
+        });
+
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[11] = isRowValid(1);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[12] = isRowValid(2);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[13] = isRowValid(3);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[14] = isRowValid(4);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[15] = isRowValid(5);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[16] = isRowValid(6);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[17] = isRowValid(7);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[18] = isRowValid(8);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[19] = isRowValid(9);
+        });
+
+
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[20] = isColValid(1);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[21] = isColValid(2);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[22] = isColValid(3);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[23] = isColValid(4);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[24] = isColValid(5);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[25] = isColValid(6);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[26] = isColValid(7);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[27] = isColValid(8);
+        });
+        threads[threadIndex++] = new Thread(() -> {
+            auxValidator[28] = isColValid(9);
+        });
+
+
+        long start = System.currentTimeMillis();
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+        }
+
+        for (
+                int i = 0;
+                i < threads.length; i++) {
+            threads[i].join();
+        }
+
+        for (
+                boolean valid : auxValidator) {
+            if (!valid) {
+                System.out.println("Sudoku solution is invalid!");
+                return;
+            }
+        }
+        System.out.println("Sudoku solution is valid!");
+        System.out.println("\nIt took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
+    }
+
     //Load the solved game from a file
     private void loadSudoku(String file) {
         try {
@@ -115,37 +237,31 @@ public class Validator {
     }
 
     //Valid if the numbers 1-9 appear only once in the row
-    private boolean isRowValid() {
-        for (int i = 0; i < size; i++) {
-            boolean[] validityArray = new boolean[9];
-            for (int j = 0; j < size; j++) {
-                int num = sudoku[j][i];
-                if (num < 1 || num > 9 || validityArray[num - 1]) {
-                    System.out.println("Element found more than one. Row: " + (i + 1) + " Col: " + (j + 1));
-                    return false;
-                } else if (!validityArray[num - 1]) {
-                    validityArray[num - 1] = true;
-                }
+    private boolean isRowValid(int row) {
+        boolean[] validityArray = new boolean[9];
+        for (int j = 0; j < size; j++) {
+            int num = sudoku[row][j];
+            if (num < 1 || num > 9 || validityArray[num - 1]) {
+                System.out.println("Element found more than one. Row: " + (row + 1) + " Col: " + (j + 1));
+                return false;
+            } else if (!validityArray[num - 1]) {
+                validityArray[num - 1] = true;
             }
-
         }
         return true;
     }
 
     //Valid if the numbers 1-9 appear only once in the column
-    private boolean isColValid() {
-        for (int i = 0; i < size; i++) {
-            boolean[] validityArray = new boolean[9];
-            for (int j = 0; j < size; j++) {
-                int num = sudoku[i][j];
-                if (num < 1 || num > 9 || validityArray[num - 1]) {
-                    System.out.println("Element found more than one. Row: " + (i + 1) + " Col: " + (j + 1));
-                    return false;
-                } else if (!validityArray[num - 1]) {
-                    validityArray[num - 1] = true;
-                }
+    private boolean isColValid(int col) {
+        boolean[] validityArray = new boolean[9];
+        for (int j = 0; j < size; j++) {
+            int num = sudoku[j][col];
+            if (num < 1 || num > 9 || validityArray[num - 1]) {
+                System.out.println("Element found more than one. Row: " + (j + 1) + " Col: " + (col + 1));
+                return false;
+            } else if (!validityArray[num - 1]) {
+                validityArray[num - 1] = true;
             }
-
         }
         return true;
     }

@@ -20,6 +20,7 @@ public class Validator {
         loadSudoku("puzzleSolved.txt");
         printSudoku();
         startValidation();
+        startValidation1();
 //        startValidation2();
     }
 
@@ -96,9 +97,57 @@ public class Validator {
                 return;
             }
         }
-        System.out.println("Sudoku solution is valid!");
-        System.out.println("\nIt took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
+        System.out.println("\nSudoku validation 0 is valid!");
+        System.out.println("It took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
     }
+
+    private void startValidation1() throws InterruptedException {
+
+        auxValidator = new boolean[11];
+
+        Thread row = new Thread(() -> {
+            for (int i = 0; i < size; i++) {
+                auxValidator[0] = isRowValid(i);
+            }
+        });
+        Thread col = new Thread(() -> {
+            for (int i = 0; i < size; i++) {
+                auxValidator[1] = isColValid(i);
+            }
+        });
+
+        Thread box = new Thread(() -> {
+            auxValidator[2] = is3x3Valid(0, 0);
+            auxValidator[3] = is3x3Valid(0, 3);
+            auxValidator[4] = is3x3Valid(0, 6);
+            auxValidator[5] = is3x3Valid(3, 0);
+            auxValidator[6] = is3x3Valid(3, 3);
+            auxValidator[7] = is3x3Valid(3, 6);
+            auxValidator[8] = is3x3Valid(6, 0);
+            auxValidator[9] = is3x3Valid(6, 3);
+            auxValidator[10] = is3x3Valid(6, 6);
+        });
+
+
+        long start = System.currentTimeMillis();
+        row.start();
+        col.start();
+        box.start();
+
+        row.join();
+        col.join();
+        box.join();
+
+        for (boolean valid : auxValidator) {
+            if (!valid) {
+                System.out.println("Sudoku validation is invalid!");
+                return;
+            }
+        }
+        System.out.println("\nSudoku solution 1 is valid!");
+        System.out.println("It took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
+    }
+
 
     private void startValidation2() throws InterruptedException {
         auxValidator = new boolean[27];
@@ -285,12 +334,26 @@ public class Validator {
 
     //Print the matrix
     public void printSudoku() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                System.out.print(" " + sudoku[i][j]);
+        int r = 0;
+        int c = 0;
+        String repeatedStar = new String(new char[4 * this.sudoku.length + 4]).replace('\0', '-');
+        for (int[] i : this.sudoku) {
+            if (r % 3 == 0)
+                System.out.print(repeatedStar + '\n');
+            for (int j : i) {
+                if (c % 3 == 0)
+                    System.out.print('|');
+                if (j < 10)
+                    System.out.print("  " + j + " ");
+                else
+                    System.out.print(" " + j + " ");
+                c++;
             }
+            r++;
+            System.out.print("|");
             System.out.println();
         }
+        System.out.print(repeatedStar + '\n');
     }
 
     public static void main(String[] args) throws InterruptedException {

@@ -91,7 +91,7 @@ public class Validator {
 
         for (boolean valid : auxValidator) {
             if (!valid) {
-                System.out.println("Sudoku solution is invalid!");
+                System.out.println("Sudoku validation is invalid!");
                 return;
             }
         }
@@ -141,7 +141,7 @@ public class Validator {
                 return;
             }
         }
-        System.out.println("\nSudoku solution 1 is valid!");
+        System.out.println("\nSudoku validation 1 is valid!");
         System.out.println("It took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
     }
 
@@ -167,7 +167,7 @@ public class Validator {
                 return;
             }
         }
-        System.out.println("\nSudoku solution 2 is valid!");
+        System.out.println("\nSudoku validation 2 is valid!");
         System.out.println("It took me " + (System.currentTimeMillis() - start) + "ms to validate this puzzle.");
     }
 
